@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Analysis Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Add hover animation for the boxes */
+    .interactive-box {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .interactive-box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .gradient-bg {
+      background: linear-gradient(145deg, #f3c6e3, #f4d7f4);
+    }
+    .gradient-bg-2 {
+      background: linear-gradient(145deg, #c0d9f0, #b3cde0);
+    }
+    .gradient-bg-3 {
+      background: linear-gradient(145deg, #c2e6c4, #d1f3d2);
+    }
+    .gradient-bg-4 {
+      background: linear-gradient(145deg, #ffecb3, #ffdb75);
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Main Container -->
+  <div class="container mx-auto my-5">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Product Analysis Dashboard</h1>
+
+    <!-- Tab Navigation -->
+    <div class="mb-6">
+      <ul class="nav nav-pills justify-center" id="tab-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="showTab('recommendation')">Product Recommendation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showTab('price')">Price Prediction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showTab('popularity')">Popularity Prediction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showTab('fraud')">Fraud Detection</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Recommendation Box (Initially visible) -->
+    <div id="recommendation" class="tab-content max-w-sm mx-auto mb-6 p-6 bg-gradient-to-br from-pink-300 via-purple-200 to-blue-300 rounded-xl shadow-lg interactive-box">
+      <h2 class="text-xl font-semibold mb-4 text-center">Product Recommendation</h2>
+      <img src="https://via.placeholder.com/250?text=Recommendation" alt="Recommendation Image" class="mx-auto mb-4">
+      <form id="recommendForm" class="flex flex-col">
+        <label for="common_name" class="mb-2 text-lg">Common Name:</label>
+        <input type="text" id="common_name" name="common_name" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-pink-400 focus:outline-none">
+        <button type="submit" class="bg-pink-500 text-white p-3 rounded-md shadow-sm hover:bg-pink-400 transition duration-200">Get Recommendations</button>
+      </form>
+      <div id="recommendations" class="mt-4 text-center"></div>
+    </div>
+
+    <!-- Price Prediction Box (Hidden initially) -->
+    <div id="price" class="tab-content max-w-sm mx-auto mb-6 p-6 bg-gradient-to-br from-yellow-300 via-orange-200 to-red-300 rounded-xl shadow-lg interactive-box hidden">
+      <h2 class="text-xl font-semibold mb-4 text-center">Price Prediction</h2>
+      <img src="https://via.placeholder.com/250?text=Price+Prediction" alt="Price Prediction Image" class="mx-auto mb-4">
+      <form id="priceForm" class="flex flex-col">
+        <label for="rate" class="mb-2 text-lg">Rating:</label>
+        <input type="number" step="0.1" id="rate" name="rate" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+        <label for="sentiment_code" class="mb-2 text-lg">Sentiment Code:</label>
+        <input type="number" id="sentiment_code" name="sentiment_code" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+        <label for="review" class="mb-2 text-lg">Review:</label>
+        <input type="text" id="review" name="review" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+        <label for="common_name_price" class="mb-2 text-lg">Common Name:</label>
+        <input type="text" id="common_name_price" name="common_name" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+        <button type="submit" class="bg-yellow-500 text-white p-3 rounded-md shadow-sm hover:bg-yellow-400 transition duration-200">Predict Price</button>
+      </form>
+      <div id="predicted_price" class="mt-4 text-center"></div>
+    </div>
+
+    <!-- Popularity Prediction Box (Hidden initially) -->
+    <div id="popularity" class="tab-content max-w-sm mx-auto mb-6 p-6 bg-gradient-to-br from-green-300 via-teal-200 to-blue-300 rounded-xl shadow-lg interactive-box hidden">
+      <h2 class="text-xl font-semibold mb-4 text-center">Popularity Prediction</h2>
+      <img src="https://via.placeholder.com/250?text=Popularity+Prediction" alt="Popularity Prediction Image" class="mx-auto mb-4">
+      <form id="popularityForm" class="flex flex-col">
+        <label for="pop_rate" class="mb-2 text-lg">Rating:</label>
+        <input type="number" step="0.1" id="pop_rate" name="rate" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none">
+        <label for="pop_text" class="mb-2 text-lg">Review Text:</label>
+        <input type="text" id="pop_text" name="text" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none">
+        <label for="pop_common_name" class="mb-2 text-lg">Common Name:</label>
+        <input type="text" id="pop_common_name" name="common_name" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none">
+        <label for="product_price" class="mb-2 text-lg">Product Price:</label>
+        <input type="number" step="0.1" id="product_price" name="product_price" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none">
+        <button type="submit" class="bg-green-500 text-white p-3 rounded-md shadow-sm hover:bg-green-400 transition duration-200">Predict Popularity</button>
+      </form>
+      <div id="predicted_popularity" class="mt-4 text-center"></div>
+    </div>
+
+    <!-- Fraud Detection Box (Hidden initially) -->
+    <div id="fraud" class="tab-content max-w-sm mx-auto mb-6 p-6 bg-gradient-to-br from-red-300 via-pink-200 to-purple-300 rounded-xl shadow-lg interactive-box hidden">
+      <h2 class="text-xl font-semibold mb-4 text-center">Fraud Detection</h2>
+      <img src="https://via.placeholder.com/250?text=Fraud+Detection" alt="Fraud Detection Image" class="mx-auto mb-4">
+      <form id="fraudForm" class="flex flex-col">
+        <label for="fraud_text" class="mb-2 text-lg">Review Text:</label>
+        <input type="text" id="fraud_text" name="text" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-red-400 focus:outline-none">
+        <label for="fraud_rate" class="mb-2 text-lg">Rating:</label>
+        <input type="number" step="0.1" id="fraud_rate" name="rate" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-red-400 focus:outline-none">
+        <label for="fraud_sentiment_code" class="mb-2 text-lg">Sentiment Code:</label>
+        <input type="number" id="fraud_sentiment_code" name="sentiment_code" required class="mb-3 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-red-400 focus:outline-none">
+        <button type="submit" class="bg-red-500 text-white p-3 rounded-md shadow-sm hover:bg-red-400 transition duration-200">Check Review</button>
+      </form>
+      <div id="fraud_result" class="mt-4 text-center"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Function to display the correct tab content
+    function showTab(tab) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach((tabContent) => {
+        tabContent.classList.add('hidden');
+      });
+
+      const activeTab = document.getElementById(tab);
+      if (activeTab) {
+        activeTab.classList.remove('hidden');
+      }
+
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach((link) => {
+        link.classList.remove('active');
+      });
+
+      const activeLink = document.querySelector(a[onclick="showTab('${tab}')"]);
+      if (activeLink) {
+        activeLink.classList.add('active');
+      }
+    }
+
+    // Initially show the recommendation tab
+    showTab('recommendation');
+
+    // Product Recommendation form submission
+    document.getElementById("recommendForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const common_name = document.getElementById("common_name").value;
+      const response = await fetch("/recommend", {
+        method: "POST",
+        body: new URLSearchParams({ common_name }),
+      });
+      const data = await response.json();
+      document.getElementById("recommendations").innerText = JSON.stringify(data);
+    };
+
+    // Price Prediction form submission
+    document.getElementById("priceForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch("/predict_price", {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
+      const data = await response.json();
+      document.getElementById("predicted_price").innerText = Predicted Price: ${data.predicted_price};
+    };
+
+    // Popularity Prediction form submission
+    document.getElementById("popularityForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch("/predict_popularity", {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
+      const data = await response.json();
+      document.getElementById("predicted_popularity").innerText = Predicted Popularity: ${data.predicted_popularity};
+    };
+
+    // Fraud Detection form submission
+    document.getElementById("fraudForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch("/detect_review", {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
+      const data = await response.json();
+      document.getElementById("fraud_result").innerText = Fraudulent Review: ${data.is_fraud};
+    };
+  </script>
+</body>
+</html>
